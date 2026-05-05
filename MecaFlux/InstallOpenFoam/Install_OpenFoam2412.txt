@@ -1,0 +1,255 @@
+# Ajouter la clé GPG
+wget -q -O - https://dl.openfoam.com/add-debian-repo.sh | sudo bash
+
+# Ou manuellement :
+curl https://dl.openfoam.com/gpg.key | sudo apt-key add -
+sudo add-apt-repository "http://dl.openfoam.com/ubuntu $(lsb_release -cs) main"
+
+sudo apt update
+sudo apt upgrade
+
+# Rechercher tous les paquets OpenFOAM
+apt search openfoam | grep -E "openfoam[0-9]+"
+
+# Ou plus spécifiquement pour les versions ESI
+apt search openfoam2 | sort
+
+# Pour voir les informations sur une version spécifique
+apt show openfoam2412-dev
+apt show openfoam2412-default
+
+
+# Installer OpenFOAM v2412 version par défaut
+sudo apt install openfoam2412-default
+
+# Installer ParaView (optionnel mais recommandé)
+sudo apt install paraviewopenfoam2412-default
+
+# Ajouter au fichier .bashrc
+echo "source /usr/lib/openfoam/openfoam2412/etc/bashrc" >> ~/.bashrc
+
+# Recharger le bashrc
+source ~/.bashrc
+
+# Vérifier la version installée
+foamVersion
+
+# Tester l'installation
+foamInstallationTest
+
+		chrisvhk@chrisvhk-Legion-Pro-7:~$ foamInstallationTest
+		Executing foamInstallationTest
+
+		Basic setup :
+		-------------------------------------------------------------------------------
+		OpenFOAM:            openfoam2412
+		ThirdParty:          [missing]
+		This can be intentional, or indicate a faulty installation
+		Shell:               bash
+		Host:                chrisvhk-Legion-Pro-7
+		OS:                  Linux version 6.14.0-37-generic
+		-------------------------------------------------------------------------------
+
+		Main OpenFOAM env variables :
+		-------------------------------------------------------------------------------
+		Environment           FileOrDirectory                          Valid      Crit
+		-------------------------------------------------------------------------------
+		$WM_PROJECT_USER_DIR  /home/chrisvhk/OpenFOAM/chrisvhk-v2412    no        no
+		$WM_THIRD_PARTY_DIR   /usr/lib/openfoam/openfoam2412/ThirdParty  yes       maybe
+		$WM_PROJECT_SITE      [env variable unset]                                no
+		-------------------------------------------------------------------------------
+
+		OpenFOAM env variables in PATH :
+		-------------------------------------------------------------------------------
+		Environment           FileOrDirectory                          Valid Path Crit
+		-------------------------------------------------------------------------------
+		$WM_PROJECT_DIR       /usr/lib/openfoam/openfoam2412            yes  yes  yes
+
+		$FOAM_APPBIN          ...12/platforms/linux64GccDPInt32Opt/bin  yes  yes  yes
+		$FOAM_SITE_APPBIN     ...12/platforms/linux64GccDPInt32Opt/bin  no        no
+		$FOAM_USER_APPBIN     ...12/platforms/linux64GccDPInt32Opt/bin  no        no
+		$WM_DIR               /usr/lib/openfoam/openfoam2412/wmake      yes  yes  often
+		-------------------------------------------------------------------------------
+
+		OpenFOAM env variables in LD_LIBRARY_PATH :
+		-------------------------------------------------------------------------------
+		Environment           FileOrDirectory                          Valid Path Crit
+		-------------------------------------------------------------------------------
+		$FOAM_LIBBIN          ...12/platforms/linux64GccDPInt32Opt/lib  yes  yes  yes
+		$FOAM_SITE_LIBBIN     ...12/platforms/linux64GccDPInt32Opt/lib  no        no
+		$FOAM_USER_LIBBIN     ...12/platforms/linux64GccDPInt32Opt/lib  no        no
+		$FOAM_EXT_LIBBIN      [env variable unset]                                maybe
+		$MPI_ARCH_PATH        /usr/lib/x86_64-linux-gnu/openmpi         yes  yes  yes
+		-------------------------------------------------------------------------------
+
+		Software Components
+		-------------------------------------------------------------------------------
+		Software     Version    Location  
+		-------------------------------------------------------------------------------
+		flex         2.6.4      /usr/bin/flex                                          
+		make         4.3        /usr/bin/make                                          
+		wmake        2412       /usr/lib/openfoam/openfoam2412/wmake/wmake             
+		gcc          13.3.0     /usr/bin/gcc                                           
+		g++          13.3.0     /usr/bin/g++                                           
+		-------------------------------------------------------------------------------
+		icoFoam      exists     ...nfoam2412/platforms/linux64GccDPInt32Opt/bin/icoFoam
+
+		Summary
+		-------------------------------------------------------------------------------
+		Base configuration ok.
+		Critical systems ok.
+
+		Done
+
+
+# Vérifier que les commandes sont disponibles
+which simpleFoam
+which blockMesh
+
+# Copier un tutoriel
+cp -r $FOAM_TUTORIALS/incompressible/simpleFoam/pitzDaily ~/
+cd ~/pitzDaily
+
+# Lancer le cas test
+
+blockMesh
+
+		chrisvhk@chrisvhk-Legion-Pro-7:~/Documents/Courses/CFD/pitzDaily$ blockMesh
+		/*---------------------------------------------------------------------------*\
+		| =========                 |                                                 |
+		| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+		|  \\    /   O peration     | Version:  2412                                  |
+		|   \\  /    A nd           | Website:  www.openfoam.com                      |
+		|    \\/     M anipulation  |                                                 |
+		\*---------------------------------------------------------------------------*/
+		Build  : _b8cf4d35-20260127 OPENFOAM=2412 patch=260127 version=2412
+		Arch   : "LSB;label=32;scalar=64"
+		Exec   : blockMesh
+		Date   : Mar 12 2026
+		Time   : 14:55:36
+		Host   : chrisvhk-Legion-Pro-7
+		PID    : 26951
+		I/O    : uncollated
+		Case   : /home/chrisvhk/Documents/Courses/CFD/pitzDaily
+		nProcs : 1
+		trapFpe: Floating point exception trapping enabled (FOAM_SIGFPE).
+		fileModificationChecking : Monitoring run-time modified files using timeStampMaster (fileModificationSkew 5, maxFileModificationPolls 20)
+		allowSystemOperations : Allowing user-supplied system call operations
+
+		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+		Create time
+
+		Creating block mesh from "system/blockMeshDict"
+		Creating block edges
+		No non-planar block faces defined
+		Creating topology blocks
+
+		Creating topology patches - from boundary section
+
+		Creating block mesh topology - scaling/transform applied later
+
+		Check topology
+
+			Basic statistics
+				Number of internal faces : 5
+				Number of boundary faces : 20
+				Number of defined boundary faces : 20
+				Number of undefined boundary faces : 0
+			Checking patch -> block consistency
+
+		Creating block offsets
+		Creating merge list (topological search)...
+
+		Creating polyMesh from blockMesh
+		Creating patches
+		Creating cells
+		Creating points with scale (0.001 0.001 0.001)
+		    Block 0 cell size :
+			i : 0.00158284 .. 0.000791418
+			j : 0.000318841 .. 0.000420268
+			k : 0.001 .. 0.001
+
+		    Block 1 cell size :
+			i : 0.000528387 .. 0.00211355
+			j : 0.00112889 .. 0.000360188
+			k : 0.001 .. 0.001
+
+		    Block 2 cell size :
+			i : 0.000528387 .. 0.00211355
+			j : 0.000318841 .. 0.000420268
+			k : 0.001 .. 0.001
+
+		    Block 3 cell size :
+			i : 0.0020578 .. 0.00514451
+			j : 0.000940741 .. 0.000940741
+			k : 0.001 .. 0.001
+
+		    Block 4 cell size :
+			i : 0.0020466 .. 0.00511651
+			j : 0.00112889 .. 0.000257962
+			k : 0.001 .. 0.001
+
+		No patch pairs to merge
+
+		Writing polyMesh with 0 cellZones
+		----------------
+		Mesh Information
+		----------------
+		  boundingBox: (-0.0206 -0.0254 -0.0005) (0.29 0.0254 0.0005)
+		  nPoints: 25012
+		  nCells: 12225
+		  nFaces: 49180
+		  nInternalFaces: 24170
+		----------------
+		Patches
+		----------------
+		  patch 0 (start: 24170 size: 30) name: inlet
+		  patch 1 (start: 24200 size: 57) name: outlet
+		  patch 2 (start: 24257 size: 223) name: upperWall
+		  patch 3 (start: 24480 size: 250) name: lowerWall
+		  patch 4 (start: 24730 size: 24450) name: frontAndBack
+
+
+
+simpleFoam
+
+		Time = 279
+
+		smoothSolver:  Solving for Ux, Initial residual = 0.000132372, Final residual = 1.28157e-05, No Iterations 5
+		smoothSolver:  Solving for Uy, Initial residual = 0.00103035, Final residual = 7.2895e-05, No Iterations 6
+		GAMG:  Solving for p, Initial residual = 0.000837667, Final residual = 7.96799e-05, No Iterations 5
+		time step continuity errors : sum local = 0.00380887, global = -0.000260816, cumulative = 1.00683
+		smoothSolver:  Solving for epsilon, Initial residual = 0.000126282, Final residual = 7.12803e-06, No Iterations 3
+		smoothSolver:  Solving for k, Initial residual = 0.000240076, Final residual = 1.49787e-05, No Iterations 4
+		ExecutionTime = 3.87 s  ClockTime = 4 s
+
+		Time = 280
+
+		smoothSolver:  Solving for Ux, Initial residual = 0.000126751, Final residual = 1.22835e-05, No Iterations 5
+		smoothSolver:  Solving for Uy, Initial residual = 0.0010066, Final residual = 7.07918e-05, No Iterations 6
+		GAMG:  Solving for p, Initial residual = 0.000801315, Final residual = 7.50181e-05, No Iterations 5
+		time step continuity errors : sum local = 0.00358398, global = -0.000247508, cumulative = 1.00659
+		smoothSolver:  Solving for epsilon, Initial residual = 0.000122189, Final residual = 7.03183e-06, No Iterations 3
+		smoothSolver:  Solving for k, Initial residual = 0.00023329, Final residual = 1.45933e-05, No Iterations 4
+		ExecutionTime = 3.89 s  ClockTime = 4 s
+
+		Time = 281
+
+		smoothSolver:  Solving for Ux, Initial residual = 0.000121693, Final residual = 1.18184e-05, No Iterations 5
+		smoothSolver:  Solving for Uy, Initial residual = 0.000983823, Final residual = 6.85698e-05, No Iterations 6
+		GAMG:  Solving for p, Initial residual = 0.000785893, Final residual = 7.08069e-05, No Iterations 5
+		time step continuity errors : sum local = 0.00338164, global = -0.000238424, cumulative = 1.00635
+		smoothSolver:  Solving for epsilon, Initial residual = 0.000120858, Final residual = 6.88789e-06, No Iterations 3
+		smoothSolver:  Solving for k, Initial residual = 0.000226125, Final residual = 1.42193e-05, No Iterations 4
+		ExecutionTime = 3.91 s  ClockTime = 4 s
+
+
+		SIMPLE solution converged in 281 iterations
+
+		streamLine streamlines write:
+		    seeded 10 particles
+		    Tracks:10
+		    Total samples:10885
+		End
+
+
