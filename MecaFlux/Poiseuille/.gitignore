@@ -1,0 +1,21 @@
+# Python virtual environment and cache
+venv/
+__pycache__/
+*.pyc
+
+# Generated results and figures
+Results/*.png
+Results/*.pdf
+Results/*.svg
+
+# OpenFOAM generated artifacts
+case*/[1-9]*/
+case*/[1-9][0-9]*/
+case*/postProcessing/
+case*/VTK/
+case*/log.*
+case*/processor*/
+
+# Editor and OS
+.vscode/
+.DS_Store
