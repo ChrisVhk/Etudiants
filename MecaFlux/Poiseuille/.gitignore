@@ -11,6 +11,10 @@ case*/
 # Générés par run_workflow.sh → ne pas versionner
 Results/
 
+# Fichiers de sauvegarde / backup
+*.bak
+*.orig
+
 # Editor and OS
 .vscode/
 .DS_Store
