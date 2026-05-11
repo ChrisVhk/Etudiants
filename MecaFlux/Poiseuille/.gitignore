@@ -3,18 +3,13 @@ venv/
 __pycache__/
 *.pyc
 
-# Generated results and figures
-Results/*.png
-Results/*.pdf
-Results/*.svg
+# ── Répertoires de cas OpenFOAM ─────────────────────────────────
+# Les cas sont générés par master_setup_V2.sh → ne pas versionner
+case*/
 
-# OpenFOAM generated artifacts
-case*/[1-9]*/
-case*/[1-9][0-9]*/
-case*/postProcessing/
-case*/VTK/
-case*/log.*
-case*/processor*/
+# ── Résultats de simulation et post-traitement ───────────────────
+# Générés par run_workflow.sh → ne pas versionner
+Results/
 
 # Editor and OS
 .vscode/
