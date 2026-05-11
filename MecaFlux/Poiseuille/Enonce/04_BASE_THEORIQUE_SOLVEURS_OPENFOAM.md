@@ -351,7 +351,7 @@ $$\Delta P = \frac{12\,\mu\,U_{moy}}{H^2}\,L \quad \text{[Pa]}$$
 
 ou en pression cinématique OpenFOAM ($p = P/\rho$, $\nu = \mu/\rho$) :
 
-$$\Delta p_{kin} = \frac{12\,\nu\,U_{moy}}{H^2}\,L \quad \text{[m}^2/\text{s}^2\text{]}$$
+$$\Delta p_{kin} = \frac{12\,\nu\,U_{moy}}{H^2}\,L \quad [\mathrm{m^2/s^2}]$$
 
 ![Profil Poiseuille plan](Images/chap9_profil_poiseuille_plan.png)
 *Fig. 9-65 (Cengel & Cimbala Chap.9) — Profil de vitesse de l'exemple 9-16 (Couette + gradient de pression). **Cas particulier $V=0$ (pointillés)** : la plaque supérieure est fixe et seul le gradient de pression entraîne l'écoulement → c'est la parabole de Poiseuille plan $u(y) = \frac{1}{2\mu}\frac{\partial P}{\partial x}(y^2-hy)$, solution exacte du TP OpenFOAM.*
