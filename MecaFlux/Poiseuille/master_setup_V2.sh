@@ -37,11 +37,14 @@ done
 ok "Dossiers case0 à case3 créés"
 
 # ============================================================
-# FONCTION : écrire blockMeshDict (identique pour tous)
+# FONCTION : écrire blockMeshDict (L et NX paramétrables)
+# Usage : write_blockMeshDict <case> <L_m> <NX>
 # ============================================================
 write_blockMeshDict() {
     local CASE=$1
-    cat > "$CASE/system/blockMeshDict" << 'EOF'
+    local LVAL=${2:-10}
+    local NX=${3:-100}
+    cat > "$CASE/system/blockMeshDict" << EOF
 FoamFile
 {
     version     2.0;
@@ -54,19 +57,19 @@ convertToMeters 1;
 
 vertices
 (
-    (0  -0.5  0)
-    (10 -0.5  0)
-    (10  0.5  0)
-    (0   0.5  0)
-    (0  -0.5  0.1)
-    (10 -0.5  0.1)
-    (10  0.5  0.1)
-    (0   0.5  0.1)
+    (0      -0.5  0)
+    ($LVAL  -0.5  0)
+    ($LVAL   0.5  0)
+    (0       0.5  0)
+    (0      -0.5  0.1)
+    ($LVAL  -0.5  0.1)
+    ($LVAL   0.5  0.1)
+    (0       0.5  0.1)
 );
 
 blocks
 (
-    hex (0 1 2 3 4 5 6 7) (100 10 1) simpleGrading (1 1 1)
+    hex (0 1 2 3 4 5 6 7) ($NX 10 1) simpleGrading (1 1 1)
 );
 
 edges ();
@@ -482,7 +485,7 @@ EOF
 # ============================================================
 hdr "CASE0 : icoFoam - 1.0 m/s (référence)"
 
-write_blockMeshDict        case0
+write_blockMeshDict        case0  100  1000
 write_fvSchemes_ico        case0
 write_fvSolution_ico       case0
 write_transportProperties  case0
@@ -503,10 +506,10 @@ application     icoFoam;
 startFrom       startTime;
 startTime       0;
 stopAt          endTime;
-endTime         20;
+endTime         200;
 deltaT          0.05;
 writeControl    timeStep;
-writeInterval   20;
+writeInterval   400;
 purgeWrite      0;
 writeFormat     ascii;
 writePrecision  6;
@@ -522,7 +525,7 @@ ok "case0 configuré (icoFoam, 1.0 m/s)"
 # ============================================================
 hdr "CASE1 : icoFoam - 0.5 m/s"
 
-write_blockMeshDict        case1
+write_blockMeshDict        case1  50   500
 write_fvSchemes_ico        case1
 write_fvSolution_ico       case1
 write_transportProperties  case1
@@ -543,10 +546,10 @@ application     icoFoam;
 startFrom       startTime;
 startTime       0;
 stopAt          endTime;
-endTime         20;
+endTime         200;
 deltaT          0.05;
 writeControl    timeStep;
-writeInterval   20;
+writeInterval   400;
 purgeWrite      0;
 writeFormat     ascii;
 writePrecision  6;
@@ -562,7 +565,7 @@ ok "case1 configuré (icoFoam, 0.5 m/s)"
 # ============================================================
 hdr "CASE2 : icoFoam - 1.5 m/s"
 
-write_blockMeshDict        case2
+write_blockMeshDict        case2  150  1500
 write_fvSchemes_ico        case2
 write_fvSolution_ico       case2
 write_transportProperties  case2
@@ -583,10 +586,10 @@ application     icoFoam;
 startFrom       startTime;
 startTime       0;
 stopAt          endTime;
-endTime         20;
+endTime         200;
 deltaT          0.05;
 writeControl    timeStep;
-writeInterval   20;
+writeInterval   400;
 purgeWrite      0;
 writeFormat     ascii;
 writePrecision  6;
@@ -602,7 +605,7 @@ ok "case2 configuré (icoFoam, 1.5 m/s)"
 # ============================================================
 hdr "CASE3 : simpleFoam - 1.5 m/s (steady-state)"
 
-write_blockMeshDict        case3
+write_blockMeshDict        case3  150  1500
 write_fvSchemes_simple     case3
 write_fvSolution_simple    case3
 write_transportProperties  case3
@@ -623,10 +626,10 @@ application     simpleFoam;
 startFrom       startTime;
 startTime       0;
 stopAt          endTime;
-endTime         1000;
+endTime         2000;
 deltaT          1;
 writeControl    timeStep;
-writeInterval   100;
+writeInterval   200;
 purgeWrite      0;
 writeFormat     ascii;
 writePrecision  6;
@@ -645,7 +648,7 @@ hdr "CASE4 : potentialFoam - 1.0 m/s (slip)"
 rm -rf case4
 mkdir -p case4/{system,constant,0}
 
-write_blockMeshDict        case4
+write_blockMeshDict        case4  10   100
 write_transportProperties  case4
 write_turbulenceProperties case4
 
@@ -848,14 +851,94 @@ ok "case4 configuré (potentialFoam, 1.0 m/s, slip)"
 
 
 # ============================================================
+# CASE 5 — icoFoam — Canal long L=200m — Re=1000
+# But : montrer l'écoulement de Poiseuille PLEINEMENT ÉTABLI
+# L_dev = 0.05 × Re × H = 0.05 × 1000 × 1 = 50 m → L = 4×L_dev
+# ============================================================
+hdr "CASE 5 — icoFoam (canal long L=200m, Re=1000 — Poiseuille pleinement établi)"
+rm -rf case5
+mkdir -p case5/{system,constant,0}
+
+write_blockMeshDict  case5  200  2000
+
+write_fvSchemes_ico   "case5"
+write_fvSolution_ico  "case5"
+
+cat > "case5/constant/transportProperties" << 'EOF'
+FoamFile { version 2.0; format ascii; class dictionary; object transportProperties; }
+transportModel  Newtonian;
+nu              nu [ 0 2 -1 0 0 0 0 ] 0.001;
+EOF
+
+cat > "case5/constant/turbulenceProperties" << 'EOF'
+FoamFile { version 2.0; format ascii; class dictionary; object turbulenceProperties; }
+simulationType  laminar;
+EOF
+
+cat > "case5/system/controlDict" << 'EOF'
+FoamFile { version 2.0; format ascii; class dictionary; object controlDict; }
+application     icoFoam;
+startFrom       startTime;
+startTime       0;
+stopAt          endTime;
+endTime         400;
+deltaT          0.05;
+writeControl    timeStep;
+writeInterval   800;
+purgeWrite      0;
+writeFormat     ascii;
+writePrecision  6;
+writeCompression off;
+timeFormat      general;
+timePrecision   6;
+runTimeModifiable true;
+EOF
+
+cat > "case5/0/p" << 'EOF'
+FoamFile { version 2.0; format ascii; class volScalarField; object p; }
+dimensions      [0 2 -2 0 0 0 0];
+internalField   uniform 0;
+boundaryField
+{
+    inlet   { type zeroGradient; }
+    outlet  { type fixedValue; value uniform 0; }
+    top     { type zeroGradient; }
+    bottom  { type zeroGradient; }
+    front   { type empty; }
+    back    { type empty; }
+}
+EOF
+
+cat > "case5/0/U" << 'EOF'
+FoamFile { version 2.0; format ascii; class volVectorField; object U; }
+dimensions      [0 1 -1 0 0 0 0];
+internalField   uniform (1.0 0 0);
+boundaryField
+{
+    inlet   { type fixedValue; value uniform (1.0 0 0); }
+    outlet  { type zeroGradient; }
+    top     { type noSlip; }
+    bottom  { type noSlip; }
+    front   { type empty; }
+    back    { type empty; }
+}
+EOF
+
+touch "case5/case5.foam"
+ok "case5 configuré (icoFoam, L=200m, 1.0 m/s, noSlip, Re=1000 — Poiseuille pleinement établi, 4×L_dev)"
+
+
+# ============================================================
 # RÉSUMÉ FINAL
 # ============================================================
 hdr "RÉSUMÉ"
 echo ""
-echo "  case0 : icoFoam      | 1.0 m/s | transient  | noSlip  | endTime=20"
-echo "  case1 : icoFoam      | 0.5 m/s | transient  | noSlip  | endTime=20"
-echo "  case2 : icoFoam      | 1.5 m/s | transient  | noSlip  | endTime=20"
-echo "  case3 : simpleFoam   | 1.5 m/s | steady     | noSlip  | endTime=1000"
-echo "  case4 : potentialFoam| 1.0 m/s | steady     | slip    | endTime=1"
+echo "  case0 : icoFoam      | 1.0 m/s | L=100m  | transient  | noSlip  | endTime=200  (2×L_dev, Re=1000)"
+echo "  case1 : icoFoam      | 0.5 m/s | L=50m   | transient  | noSlip  | endTime=200  (2×L_dev, Re=500)"
+echo "  case2 : icoFoam      | 1.5 m/s | L=150m  | transient  | noSlip  | endTime=200  (2×L_dev, Re=1500)"
+echo "  case3 : simpleFoam   | 1.5 m/s | L=150m  | steady     | noSlip  | endTime=2000 (2×L_dev, Re=1500)"
+echo "  case4 : potentialFoam| 1.0 m/s | L=10m   | steady     | slip    | endTime=1"
+echo "  case5 : icoFoam      | 1.0 m/s | L=200m  | transient  | noSlip  | endTime=400  (4×L_dev, Re=1000)"
+echo "          → Poiseuille PLEINEMENT ÉTABLI — coupes à 25/50/75/100% du canal"
 echo ""
 ok "master_setup_V2.sh terminé → lance : bash run_all_cases_V2.sh"

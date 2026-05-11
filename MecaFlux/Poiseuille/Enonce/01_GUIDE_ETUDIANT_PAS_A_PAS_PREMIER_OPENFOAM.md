@@ -1,101 +1,124 @@
-# Guide Etudiant Pas a Pas (Premier OpenFOAM)
-## TP Mecanique des fluides - Version robuste et ludique
+# Guide Étudiant Pas à Pas — Premier OpenFOAM
+## TP Mécanique des fluides — Canal de Poiseuille 2D
+
+---
 
 ## 1. Mission globale
-Comparer 3 modeles physiques et numeriques:
-1. Ecoulement visqueux transitoire (icoFoam): case0, case1, case2.
-2. Ecoulement visqueux permanent (simpleFoam): case3.
-3. Ecoulement potentiel (potentialFoam): case4.
 
-En fin de TP, vous devez repondre clairement:
-- Quand le modele potentiel est pertinent.
-- Pourquoi il ne remplace pas un modele visqueux pour les pertes de charge.
-- Quel solveur choisir selon l'objectif (rapidite, precision, fidelite physique).
+Comparer **3 modèles physiques** et **2 solveurs** sur un canal plan 2D (Poiseuille) :
+1. **Écoulement visqueux transitoire** (icoFoam) : case0, case1, case2, case5.
+2. **Écoulement visqueux permanent** (simpleFoam) : case3.
+3. **Écoulement potentiel** (potentialFoam) : case4.
 
-## 2. Parcours conseille (4h)
-1. 0h00-0h30: verification environnement + creation des cas.
-2. 0h30-1h15: lancement des 5 cas.
-3. 1h15-2h00: comparaison physique et numerique.
-4. 2h00-2h45: convergence (residus + stabilisation temporelle).
-5. 2h45-4h00: interpretation et redaction.
+En fin de TP, vous devez répondre clairement :
+- Pourquoi le profil numérique de case0 s'écarte-t-il de la parabole analytique ?
+- Pourquoi case5 (L=100m) donne-t-il un profil quasi-parfait ?
+- Pourquoi potentialFoam ne peut pas remplacer un solveur visqueux pour les pertes de charge ?
+- Quel solveur choisir selon l'objectif (rapidité, précision, fidélité physique) ?
 
-## 3. Bloc execution minimal (copier-coller)
+---
+
+## 2. Parcours conseillé (4h)
+
+| Phase | Durée | Activité |
+|-------|-------|----------|
+| 0h00 – 0h15 | 15 min | QCM prérequis (`02_QCM_PREREQUIS_ETUDIANT.md`) |
+| 0h15 – 0h45 | 30 min | Vérification environnement + génération des cas |
+| 0h45 – 1h45 | 60 min | Lancement des 6 simulations |
+| 1h45 – 2h30 | 45 min | Post-traitement Python + analyse des figures |
+| 2h30 – 3h15 | 45 min | Interprétation physique + comparaison case0 vs case5 |
+| 3h15 – 4h00 | 45 min | Rédaction de la conclusion + QCM final |
+
+---
+
+## 3. Bloc d'exécution complet (une seule commande)
+
 ```bash
-bash master_setup_V2.sh
-bash run_all_cases_V2.sh
+# Option 1 : tout en une commande (recommandé)
+bash run_workflow.sh
 
-python3 scripts/analyze_results.py
-python3 scripts/compare_cases.py
-python3 scripts/plot_results.py
-python3 scripts/convergence_check.py
-python3 scripts/stabilization_study.py
+# Option 2 : étape par étape
+bash master_setup_V2.sh       # Génère les 6 cas (case0 à case5)
+bash run_all_cases_V2.sh      # blockMesh + solveurs + foamToVTK
+bash run_postproc.sh          # Tous les scripts Python (figures + stats)
 ```
 
-## 4. Checkpoints de robustesse
-### Checkpoint 1 - Execution
-- Les 5 cas se lancent sans erreur fatale.
-- Les logs de solveur existent et sont exploitables.
+> **case5 (L=100m) prend environ 5-10 min de calcul** — lancez-le en premier !
 
-### Checkpoint 2 - Convergence
-- Vous commentez les residus (pas uniquement "ca tourne").
-- Vous justifiez la stabilisation avec un critere quantifie.
+---
 
-### Checkpoint 3 - Analyse physique
-- Vous comparez explicitement case4 vs case0-3.
-- Vous donnez au moins un ecart chiffre (temps de calcul, Delta p, Umax, etc.).
+## 4. Observation prioritaire — La longueur de développement
 
-## 5. Ce qu'il faut observer en priorite
-### 5.1 Comparaison des solveurs
-- case0/1/2 (icoFoam): evolution temporelle et approche du regime etabli.
-- case3 (simpleFoam): convergence vers une solution stationnaire.
-- case4 (potentialFoam): calcul tres rapide mais sans dissipation visqueuse.
+### Pourquoi les profils numériques ne sont-ils pas paraboliques ?
 
-### 5.2 Question obligatoire: potentiel vs visqueux
-Comparez case4 avec case0-3 sur:
-- temps de calcul,
-- chute de pression,
-- validite physique pour les pertes de charge.
+$$L_{dev} \approx 0.05 \times Re \times H$$
 
-Conclusion attendue:
-- potentialFoam est utile pour initialiser ou faire un pre-diagnostic,
-- mais ne remplace pas un solveur Navier-Stokes visqueux.
+| Cas   | Re   | $L_{dev}$ | Canal | Développement à la sortie |
+|-------|------|-----------|-------|--------------------------|
+| case0 | 1000 | **50 m**  | 10 m  | **20 %** seulement       |
+| case1 | 500  | **25 m**  | 10 m  | **40 %** seulement       |
+| case2 | 1500 | **75 m**  | 10 m  | **13 %** seulement       |
+| case5 | 1000 | **50 m**  | 100 m | **100 %** ✅             |
 
-### 5.3 Question obligatoire: convergence
-Deux niveaux a documenter:
-1. Convergence iterative (residus): `scripts/convergence_check.py`.
-2. Stabilisation temporelle (transitoire): `scripts/stabilization_study.py`.
+> **Ce n'est pas un bug — c'est de la physique.** Pour atteindre le profil parabolique de Poiseuille, il faut un canal suffisamment long. case5 est la démonstration expérimentale.
 
-Critere recommande:
-- variation relative <= 1% sur Umax et Delta p_kin en fin de simulation.
+---
 
-## 6. Livrables obligatoires
-1. Tableau comparatif des 5 cas (solveur, statut, CPU, interpretation physique).
-2. Deux figures de convergence:
-   - residuals/convergence,
-   - stabilisation temporelle.
-3. Section "potentiel vs visqueux" (10 lignes minimum, argumentee).
-4. Conclusion d'ingenieur (10 a 15 lignes):
-   - solveur recommande selon l'usage,
-   - limites du choix,
-   - amelioration proposee.
-5. Scene ParaView globale `paraview_cases.pvsm` + captures comparatives.
+## 5. Checkpoints de robustesse
 
-Pour la procedure detaillee ParaView:
-- `08_GUIDE_PARAVIEW_PAS_A_PAS.md`
+### Checkpoint 1 — Exécution
+- Les 6 cas se lancent sans erreur fatale.
+- Les logs de solveur existent et se terminent par `End`.
 
-## 7. Mini-defis (ludique)
-- Defi 1 (chrono): obtenir une premiere comparaison case3 vs case4 en moins de 15 minutes.
-- Defi 2 (qualite): produire une figure comparative sans biais d'echelle couleur.
-- Defi 3 (expert): proposer un protocole pour valider la stabilite numerique.
+### Checkpoint 2 — Convergence numérique
+- Résidus < 10⁻⁵ pour les cas icoFoam et potentialFoam.
+- simpleFoam : message `SIMPLE solution converged`.
+- ⚠️ **Terminé ≠ Convergé** — vérifiez les résidus !
 
-## 8. Questions du compte-rendu
-1. Quel cas est le plus robuste numeriquement et pourquoi?
-2. Quel cas est le plus pertinent pour estimer une perte de charge visqueuse?
-3. Quel est l'interet de potentialFoam dans une chaine CFD?
-4. A partir de quel temps les grandeurs deviennent-elles stables?
+### Checkpoint 3 — Cohérence physique
+- case5 : $U_{max} \approx 1.50$ m/s (≈ 1.5 × U_moy) → parabole de Poiseuille.
+- case4 : $\Delta P \approx 0$ Pa → aucune viscosité → normal.
+- case2 ≈ case3 (même Re=1500, solveurs différents) → résultats cohérents.
 
-## 9. Erreurs frequentes a eviter
-1. Confondre simulation terminee et simulation convergee.
-2. Conclure sur la turbulence alors que le regime est laminaire.
-3. Oublier les limites du modele potentiel.
-4. Ne pas quantifier les ecarts.
+### Checkpoint 4 — Analyse physique
+- Comparer explicitement case4 vs case0 : au moins **deux indicateurs chiffrés**.
+- Comparer case0 vs case5 : quantifier l'effet de la longueur de développement.
+
+---
+
+## 6. Questions obligatoires (à traiter dans votre restitution)
+
+1. **Longueur de développement** : calculez $L_{dev}$ pour case0. Qu'observe-t-on à x=9m ? Comparez avec case5.
+2. **Potentiel vs visqueux** : comparez case4 et case0 sur le temps CPU, $U_{max}$, $\Delta P$. Concluez sur les limites de potentialFoam.
+3. **Convergence numérique** : que signifie un résidu ? Quand peut-on dire qu'une simulation est **validée** ?
+4. **Solveur stationnaire vs transitoire** : comparez case2 (icoFoam, t=20s) et case3 (simpleFoam, 180 iter). Quelles différences ? Quel est l'intérêt de chaque solveur ?
+5. **Conclusion ingénieur** : quel solveur recommanderiez-vous pour calculer la perte de charge dans une conduite navale ? Justifiez.
+
+---
+
+## 7. Livrables obligatoires
+
+1. **Tableau comparatif** des 6 cas : solveur, statut convergence, $U_{max}$, $\Delta P$ (numérique vs analytique, % écart).
+2. **Figure profils** : superposition case0 / case5 / analytique → illustration de la longueur de développement.
+3. **Figure convergence** : résidus d'au moins 2 cas, commentés.
+4. **Section potentiel vs visqueux** (10 lignes minimum, argumentée avec chiffres).
+5. **Conclusion d'ingénieur** (10-15 lignes) : solveur recommandé selon l'usage, limites, amélioration proposée.
+6. **Scène ParaView** `paraview_cases.pvsm` + 3 captures comparatives.
+
+---
+
+## 8. Erreurs fréquentes à éviter
+
+1. Confondre **simulation terminée** (log `End`) et **simulation convergée** (résidus < seuil).
+2. Conclure que "le modèle est faux" parce que le profil n'est pas parabolique → c'est la **zone d'entrée**.
+3. Affirmer que potentialFoam est inutile → il est utile pour **initialiser** ou **pré-diagnostiquer**.
+4. Ne pas quantifier les écarts (rester qualitatif = note limitée).
+5. Oublier que $p_{OF}$ est en m²/s² (cinématique) → multiplier par $\rho=1000$ pour obtenir des Pa.
+
+---
+
+## 9. Mini-défis (ludique)
+
+- **Défi 1 (chrono)** : obtenir une première comparaison case0 vs case5 en moins de 15 minutes.
+- **Défi 2 (précision)** : calculer à la main $\Delta P$ de case5 et comparer au résultat OpenFOAM.
+- **Défi 3 (expert)** : proposer un cas supplémentaire (géométrie ou Re différent) pour étudier la transition laminaire/turbulente.

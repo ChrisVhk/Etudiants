@@ -18,8 +18,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 OUTPUT_DIR = BASE_DIR / "Results"
 OUTPUT_DIR.mkdir(exist_ok=True)
 
-CASES = ["case0", "case1", "case2"]
-COLORS = {"case0": "#1f77b4", "case1": "#2ca02c", "case2": "#ff7f0e"}
+CASES = ["case0", "case1", "case2", "case5"]
+COLORS = {"case0": "#1f77b4", "case1": "#2ca02c", "case2": "#ff7f0e", "case5": "#8c564b"}
 NY = 10
 EPS_STAB = 0.01  # 1%
 
@@ -175,25 +175,55 @@ def main(cases):
         summary.append((c, umax[-1], dpk[-1], t_u, t_p))
 
         col = COLORS.get(c, "gray")
-        axes[0].plot(t, umax, "o-", color=col, lw=1.5, ms=4, label=c)
-        axes[1].plot(t, dpk, "o-", color=col, lw=1.5, ms=4, label=c)
+        u_mean_val = umax[-1]
+        dpk_mean_val = dpk[-1]
+
+        axes[0].plot(t, umax, "o-", color=col, lw=1.8, ms=4,
+                     label=f"{c}  (final={u_mean_val:.3f} m/s)")
+        axes[1].plot(t, dpk, "o-", color=col, lw=1.8, ms=4,
+                     label=f"{c}  (final={dpk_mean_val:.4f} m²/s²)")
+
+        # Ligne horizontale de valeur finale
+        axes[0].axhline(u_mean_val, color=col, ls=":", lw=1.0, alpha=0.5)
+        axes[1].axhline(dpk_mean_val, color=col, ls=":", lw=1.0, alpha=0.5)
 
         if t_u is not None:
-            axes[0].axvline(t_u, color=col, ls=":", alpha=0.5)
+            axes[0].axvline(t_u, color=col, ls="--", lw=1.5, alpha=0.7)
+            axes[0].text(t_u + 0.2, u_mean_val * 0.95,
+                         f"t_stab={t_u:.0f}s", fontsize=7.5,
+                         color=col, va="top")
         if t_p is not None:
-            axes[1].axvline(t_p, color=col, ls=":", alpha=0.5)
+            axes[1].axvline(t_p, color=col, ls="--", lw=1.5, alpha=0.7)
+            axes[1].text(t_p + 0.2, dpk_mean_val * 0.95,
+                         f"t_stab={t_p:.0f}s", fontsize=7.5,
+                         color=col, va="top")
 
-    axes[0].set_title("Stabilisation de Umax(t)")
-    axes[0].set_xlabel("Temps")
-    axes[0].set_ylabel("Umax (m/s)")
+    axes[0].set_title(
+        "Stabilisation de $U_{max}(t)$\n"
+        "Tirets verticaux = instant de stabilisation (écart relatif ≤ 1%)",
+        fontsize=10
+    )
+    axes[0].set_xlabel("Temps simulé (s)", fontsize=11)
+    axes[0].set_ylabel("$U_{max}$ (m/s)", fontsize=11)
     axes[0].grid(True, alpha=0.3)
-    axes[0].legend()
+    axes[0].legend(fontsize=9)
+    axes[0].text(0.02, 0.97,
+                 "Critère de stabilisation :\n"
+                 "  |valeur(t) - valeur_finale| / valeur_finale < 1%\n"
+                 "Tirets horizontaux = valeur finale",
+                 transform=axes[0].transAxes, fontsize=7.5,
+                 va="top", ha="left",
+                 bbox=dict(boxstyle="round,pad=0.4", facecolor="#fff9c4", alpha=0.9))
 
-    axes[1].set_title("Stabilisation de Delta p_kin(t)")
-    axes[1].set_xlabel("Temps")
-    axes[1].set_ylabel("Delta p_kin (m^2/s^2)")
+    axes[1].set_title(
+        "Stabilisation de $\\Delta p_{kin}(t)$\n"
+        "Tirets verticaux = instant de stabilisation (écart relatif ≤ 1%)",
+        fontsize=10
+    )
+    axes[1].set_xlabel("Temps simulé (s)", fontsize=11)
+    axes[1].set_ylabel("$\\Delta p_{kin}$ (m²/s²)  [pression cinématique]", fontsize=11)
     axes[1].grid(True, alpha=0.3)
-    axes[1].legend()
+    axes[1].legend(fontsize=9)
 
     out = OUTPUT_DIR / "stabilization_V2.png"
     plt.tight_layout()

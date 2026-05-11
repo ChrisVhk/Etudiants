@@ -23,12 +23,13 @@ SOLVER[case1]="icoFoam"
 SOLVER[case2]="icoFoam"
 SOLVER[case3]="simpleFoam"
 SOLVER[case4]="potentialFoam"
+SOLVER[case5]="icoFoam"   # Canal long L=100m — Poiseuille établi
 
 # ============================================================
 # VÉRIFICATIONS
 # ============================================================
 hdr "VÉRIFICATIONS"
-for case in case0 case1 case2 case3 case4; do
+for case in case0 case1 case2 case3 case4 case5; do
     [ -d "$SCRIPT_DIR/$case" ] || err "$case introuvable. Lance d'abord : bash master_setup_V2.sh"
 done
 ok "Tous les cases présents"
@@ -36,7 +37,7 @@ ok "Tous les cases présents"
 # ============================================================
 # BOUCLE PRINCIPALE
 # ============================================================
-for case in case0 case1 case2 case3 case4; do
+for case in case0 case1 case2 case3 case4 case5; do
 
     SOLVER_NAME="${SOLVER[$case]}"
     LOG="log.$SOLVER_NAME"

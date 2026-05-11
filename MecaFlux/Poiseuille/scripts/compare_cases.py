@@ -28,14 +28,25 @@ CASE_U_MEAN = {
     "case2": 1.5,
     "case3": 1.5,
     "case4": 1.0,
+    "case5": 1.0,
+}
+
+CASE_L = {
+    "case0": 100.0,
+    "case1":  50.0,
+    "case2": 150.0,
+    "case3": 150.0,
+    "case4":  10.0,
+    "case5": 200.0,
 }
 
 CASES = {
-    "case0": {"label": "icoFoam\nU inlet fixe",    "color": "#1f77b4", "solver": "icoFoam"},
-    "case1": {"label": "icoFoam\np inlet fixe",    "color": "#2ca02c", "solver": "icoFoam"},
-    "case2": {"label": "icoFoam\nU+p mixte",       "color": "#ff7f0e", "solver": "icoFoam"},
-    "case3": {"label": "simpleFoam\nsteady-state", "color": "#d62728", "solver": "simpleFoam"},
-    "case4": {"label": "potentialFoam\npotentiel", "color": "#9467bd", "solver": "potentialFoam"},
+    "case0": {"label": "icoFoam\nRe=1000 — référence",        "color": "#1f77b4", "solver": "icoFoam"},
+    "case1": {"label": "icoFoam\nRe=500 — effet Re faible",    "color": "#2ca02c", "solver": "icoFoam"},
+    "case2": {"label": "icoFoam\nRe=1500 — effet Re élevé",   "color": "#ff7f0e", "solver": "icoFoam"},
+    "case3": {"label": "simpleFoam\nRe=1500 — steady-state",  "color": "#d62728", "solver": "simpleFoam"},
+    "case4": {"label": "potentialFoam\ninviscide",            "color": "#9467bd", "solver": "potentialFoam"},
+    "case5": {"label": "icoFoam\nL=100m — établi",          "color": "#8c564b", "solver": "icoFoam"},
 }
 
 NY = 10
@@ -63,7 +74,8 @@ def delta_p_ana_kin(case_name):
         return None
     nu = get_case_nu(case_name)
     u = CASE_U_MEAN.get(case_name, 1.0)
-    return 12.0 * nu * u * L / H**2
+    case_l = CASE_L.get(case_name, L)
+    return 12.0 * nu * u * case_l / H**2
 
 # ──────────────────────────────────────────────────────────────────
 def get_vtk_count(case_name):
@@ -242,11 +254,11 @@ def print_table():
     print(f"{'='*w}\n")
 
 def plot_bar_comparison():
-    fig, axes = plt.subplots(1, 3, figsize=(14, 5))
+    fig, axes = plt.subplots(1, 2, figsize=(13, 5))
     fig.suptitle(
-        "Comparaison des 4 cas — Hagen-Poiseuille V2\n"
-        "(OpenFOAM 2412, Canal 2D)",
-        fontsize=13, fontweight="bold"
+        "Comparaison quantitative des 5 cas — Hagen-Poiseuille V2\n"
+        "(OpenFOAM 2412, Canal 2D — L=10m, H=1m, ν=0.001 m²/s)",
+        fontsize=12, fontweight="bold"
     )
 
     case_names = list(CASES.keys())
@@ -256,71 +268,89 @@ def plot_bar_comparison():
 
     # ── U_max ──────────────────────────────────────────────────
     ax = axes[0]
-    u_vals = [get_u_max(c) for c in case_names]
+    u_vals     = [get_u_max(c) for c in case_names]
     u_ana_vals = [u_max_ana(c) for c in case_names]
-    u_plot = [0.0 if v is None else v for v in u_vals]
+    u_plot     = [0.0 if v is None else v for v in u_vals]
+    bars = ax.bar(x, u_plot, color=colors, alpha=0.85,
+                  edgecolor="white", lw=1.5)
     valid_u_ana = [i for i, v in enumerate(u_ana_vals) if v is not None]
     if valid_u_ana:
         ax.plot([x[i] for i in valid_u_ana], [u_ana_vals[i] for i in valid_u_ana],
-                "k--", lw=2, marker="x", ms=8, label="Analytique (cas visqueux)")
-    ax.set_xticks(x); ax.set_xticklabels(labels, fontsize=8)
-    ax.set_ylabel("$U_{max}$ (m/s)"); ax.set_title("Vitesse maximale")
-    ax.set_ylim(0, 2.0); ax.legend(fontsize=8); ax.grid(axis="y", alpha=0.3)
-    bars = ax.bar(x, u_plot, color=colors, alpha=0.85,
-                  edgecolor="white", lw=1.5)
-    for bar, val in zip(bars, u_vals):
+                "k--o", lw=2, ms=8, label="Analytique Poiseuille établi")
+    ax.set_xticks(x)
+    ax.set_xticklabels(labels, fontsize=8)
+    ax.set_ylabel("$U_{max}$ (m/s)")
+    ax.set_title("Vitesse maximale $U_{max}$\n(valeur en sortie de canal x=9m)")
+    ax.set_ylim(0, max(filter(None, u_ana_vals), default=2.5) * 1.35)
+    ax.legend(fontsize=8)
+    ax.grid(axis="y", alpha=0.3)
+    for i, (bar, val, ana) in enumerate(zip(bars, u_vals, u_ana_vals)):
         if val is None:
-            ax.text(bar.get_x() + bar.get_width()/2,
-                    0.02, "N/A", ha="center", va="bottom", fontsize=9)
+            ax.text(bar.get_x() + bar.get_width()/2, 0.05,
+                    "N/A", ha="center", va="bottom", fontsize=9)
         else:
             ax.text(bar.get_x() + bar.get_width()/2,
-                    bar.get_height() + 0.02,
-                    f"{val:.2f}", ha="center", va="bottom", fontsize=9)
+                    bar.get_height() + 0.03,
+                    f"{val:.2f}", ha="center", va="bottom", fontsize=9,
+                    fontweight="bold")
+            if ana is not None:
+                err = abs(val - ana) / ana * 100
+                ax.text(bar.get_x() + bar.get_width()/2,
+                        bar.get_height() + 0.12,
+                        f"Δ={err:.0f}%", ha="center", va="bottom",
+                        fontsize=7.5, color="gray")
 
-    # ── ΔP ─────────────────────────────────────────────────────
+    # ── ΔP (Pa) ────────────────────────────────────────────────
     ax = axes[1]
-    dp_vals = [get_delta_p(c) for c in case_names]
+    dp_vals     = [get_delta_p(c) for c in case_names]
     dp_ana_vals = [delta_p_ana_kin(c) for c in case_names]
-    dp_plot = [0.0 if v is None else v for v in dp_vals]
+    dp_plot     = [0.0 if v is None else v * RHO for v in dp_vals]
+    dp_ana_pa   = [v * RHO if v is not None else None for v in dp_ana_vals]
     bars = ax.bar(x, dp_plot, color=colors, alpha=0.85,
                   edgecolor="white", lw=1.5)
-    valid_dp_ana = [i for i, v in enumerate(dp_ana_vals) if v is not None]
+    valid_dp_ana = [i for i, v in enumerate(dp_ana_pa) if v is not None]
     if valid_dp_ana:
-        ax.plot([x[i] for i in valid_dp_ana], [dp_ana_vals[i] for i in valid_dp_ana],
-                "k--", lw=2, marker="x", ms=8, label="Analytique (cas visqueux)")
-    ax.set_xticks(x); ax.set_xticklabels(labels, fontsize=8)
-    ax.set_ylabel("$\\Delta p_{kin}$ (m$^2$/s$^2$)")
-    ax.set_title("Chute de pression cinématique")
+        ax.plot([x[i] for i in valid_dp_ana], [dp_ana_pa[i] for i in valid_dp_ana],
+                "k--o", lw=2, ms=8, label="Analytique Poiseuille établi")
+    ax.set_xticks(x)
+    ax.set_xticklabels(labels, fontsize=8)
+    ax.set_ylabel("Chute de pression $\\Delta P$ (Pa)  [ρ=1000 kg/m³]")
+    ax.set_title("Chute de pression totale $\\Delta P$\n"
+                 "case4 (potentialFoam) : ΔP≈0 car pas de viscosité !")
     ax.set_ylim(bottom=0)
-    ax.legend(fontsize=8); ax.grid(axis="y", alpha=0.3)
-    for bar, val in zip(bars, dp_vals):
-        if val is None:
-            ax.text(bar.get_x() + bar.get_width()/2,
-                    1, "N/A", ha="center", va="bottom", fontsize=9)
-        else:
-            ax.text(bar.get_x() + bar.get_width()/2,
-                    bar.get_height() + 1,
-                    f"{val:.0f}", ha="center", va="bottom", fontsize=9)
-
-    # ── VTK count ──────────────────────────────────────────────
-    ax = axes[2]
-    vtk_vals = [get_vtk_count(c) for c in case_names]
-    bars = ax.bar(x, vtk_vals, color=colors, alpha=0.85,
-                  edgecolor="white", lw=1.5)
-    ax.set_xticks(x); ax.set_xticklabels(labels, fontsize=8)
-    ax.set_ylabel("Fichiers .vtm"); ax.set_title("Fichiers VTK générés")
+    ax.legend(fontsize=8)
     ax.grid(axis="y", alpha=0.3)
-    for bar, val in zip(bars, vtk_vals):
-        ax.text(bar.get_x() + bar.get_width()/2,
-                bar.get_height() + 0.2,
-                str(val), ha="center", va="bottom",
-                fontsize=10, fontweight="bold")
+    for bar, val, ana in zip(bars, dp_vals, dp_ana_pa):
+        if val is None:
+            ax.text(bar.get_x() + bar.get_width()/2, 5,
+                    "N/A", ha="center", va="bottom", fontsize=9)
+        else:
+            val_pa = val * RHO
+            ax.text(bar.get_x() + bar.get_width()/2,
+                    bar.get_height() + 3,
+                    f"{val_pa:.0f} Pa", ha="center", va="bottom",
+                    fontsize=8, fontweight="bold")
+            if ana is not None:
+                err = abs(val_pa - ana) / ana * 100
+                ax.text(bar.get_x() + bar.get_width()/2,
+                        bar.get_height() + max(bar.get_height() * 0.08, 15),
+                        f"Δ={err:.0f}%", ha="center", va="bottom",
+                        fontsize=7.5, color="gray")
+
+    ax.text(0.98, 0.97,
+            "case4 (potentialFoam) :\n"
+            "Fluide inviscide → aucune\n"
+            "dissipation → ΔP ≈ 0\n"
+            "(Bernoulli sans friction)",
+            transform=ax.transAxes, fontsize=7.5,
+            ha="right", va="top",
+            bbox=dict(boxstyle="round,pad=0.4", facecolor="#e8f5e9", alpha=0.9))
 
     plt.tight_layout()
     out = OUTPUT_DIR / "comparison_V2.png"
     plt.savefig(out, dpi=150)
+    plt.close()
     print(f"  ✅ {out.relative_to(BASE_DIR)}")
-    plt.show()
 
 # ──────────────────────────────────────────────────────────────────
 if __name__ == "__main__":
