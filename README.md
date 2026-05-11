@@ -67,7 +67,6 @@ bash run_postproc.sh
 | `02_QCM_PREREQUIS_ETUDIANT.md` | QCM de prérequis |
 | `03_QCM_FINAL_ETUDIANT.md` | QCM d'évaluation finale |
 | `04_BASE_THEORIQUE_SOLVEURS_OPENFOAM.md` | Base théorique et formules |
-| `05_CORRIGE_QCM_PREREQUIS_FINAL.md` | Corrigé des QCM |
 | `06_FICHE_ETUDIANT_CONSIGNE.md` | Consignes de TP |
 | `08_GUIDE_PARAVIEW_PAS_A_PAS.md` | Guide de visualisation ParaView |
 
