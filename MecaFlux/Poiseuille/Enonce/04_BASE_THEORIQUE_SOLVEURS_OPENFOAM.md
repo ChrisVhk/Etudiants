@@ -199,7 +199,7 @@ $$\rho\left(\frac{\partial v}{\partial t} + u\frac{\partial v}{\partial x} + v\f
 
 En adimensionnalisant les équations de Navier-Stokes avec une vitesse de référence $U_0$, une longueur de référence $L$ et une pression de référence $\rho U_0^2$ :
 
-$$\frac{\partial\vec{U}^*}{\partial t^*} + (\vec{U}^*\cdot\nabla^*)\vec{U}^* = -\nabla^* p^* + \frac{1}{Re}\nabla^{*2}\vec{U}^*$$
+$$\frac{\partial\vec{U}^*}{\partial t^*} + (\vec{U}^*\cdot\nabla^*)\vec{U}^* = -\nabla^* p^* + \frac{1}{Re}(\nabla^*)^2\vec{U}^*$$
 
 Le seul paramètre adimensionnel est le **nombre de Reynolds** :
 
