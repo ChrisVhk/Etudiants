@@ -54,6 +54,9 @@ $$\frac{D\vec{V}}{Dt} = \underbrace{\frac{\partial \vec{V}}{\partial t}}_{\text{
 
 > **Important pour le TP** : dans l'écoulement de Poiseuille **pleinement établi**, l'accélération advective est nulle ($u$ ne dépend que de $y$). Dans la zone d'entrée, elle est non nulle — c'est pourquoi le canal court ne donne pas la bonne pression analytique.
 
+![Dérivée matérielle](Images/chap4_derivee_materielle.png)
+*Fig. 4-13/14 (Cengel & Cimbala Chap.4) — La dérivée matérielle $D/Dt$ se décompose en partie locale $\partial/\partial t$ et partie advective $(\vec{V}\cdot\nabla)$. Le champ d'accélération (flèches) et les lignes de courant (courbes noires) sont tracés pour un champ de vitesse 2D stationnaire.*
+
 ### 1.3 Visualisation des écoulements
 
 | Outil            | Définition                                   | Propriété                                |
@@ -63,6 +66,9 @@ $$\frac{D\vec{V}}{Dt} = \underbrace{\frac{\partial \vec{V}}{\partial t}}_{\text{
 | Traînée          | Trace laissée par un traceur injecté         | Intéresse la visualisation expérimentale |
 
 En **régime stationnaire**, lignes de courant, trajectoires et traînées sont confondues.
+
+![Trajectoires et tube de courant](Images/chap4_trajectoires_tube_courant.png)
+*Fig. 4-19/20/21 (Cengel & Cimbala Chap.4) — Tube de courant (Fig. 4-19) : sa section diminue quand l'écoulement accélère (continuité). Trajectoire (Fig. 4-20) : chemin d'une particule individuelle. Photo expérimentale (Fig. 4-21) : trajectoires elliptiques de particules sous des ondes de surface — en régime instationnaire, trajectoire ≠ ligne de courant.*
 
 ### 1.4 Propriétés cinématiques fondamentales
 
@@ -83,6 +89,9 @@ $$\zeta_z = \frac{\partial v}{\partial x} - \frac{\partial u}{\partial y}$$
 
 - Si $\vec{\zeta} = \vec{0}$ partout : l'écoulement est **irrotationnel** (potentiel).
 - Pour l'écoulement de Poiseuille : $\zeta_z = -dU/dy \neq 0$ → écoulement **rotationnel** (visqueux).
+
+![Vecteur vorticité](Images/chap4_vorticite.png)
+*Fig. 4-43/44 (Cengel & Cimbala Chap.4) — Section 4-5 : vorticité et rotationnalité. Le vecteur vorticité $\vec{\zeta} = \nabla\times\vec{V}$ est égal au double de la vitesse angulaire locale d'un élément fluide ($\vec{\zeta} = 2\vec{\omega}$). Sa direction est donnée par la règle de la main droite.*
 
 ### 1.5 Fonction de courant
 
@@ -268,6 +277,9 @@ $$\boxed{u(y) = V\frac{y}{h}}$$
 
 Profil **linéaire**. La contrainte de cisaillement à la paroi est uniforme : $\tau_{wall} = \mu V/h$.
 
+![Géométrie Couette](Images/chap9_conditions_limites_couette.png)
+*Fig. 9-55/56/57 (Cengel & Cimbala Chap.9) — Conditions aux limites fondamentales : surface libre eau-air (Fig. 9-55), plan de symétrie (Fig. 9-56), et géométrie de l'écoulement de Couette — Fig. 9-57 : plaque inférieure fixe, plaque supérieure se déplaçant à vitesse $V$, fluide newtonien de viscosité $\mu$ entre les deux.*
+
 ### 4.4 Écoulement de Poiseuille Plan (canal 2D)
 
 C'est l'écoulement d'un fluide visqueux entre deux plaques parallèles fixes, mis en mouvement par un gradient de pression appliqué. C'est le cas physique du TP.
@@ -341,6 +353,9 @@ ou en pression cinématique OpenFOAM ($p = P/\rho$, $\nu = \mu/\rho$) :
 
 $$\Delta p_{kin} = \frac{12\,\nu\,U_{moy}}{H^2}\,L \quad \text{[m}^2/\text{s}^2\text{]}$$
 
+![Profil Poiseuille plan](Images/chap9_profil_poiseuille_plan.png)
+*Fig. 9-65 (Cengel & Cimbala Chap.9) — Profil de vitesse de l'exemple 9-16 (Couette + gradient de pression). **Cas particulier $V=0$ (pointillés)** : la plaque supérieure est fixe et seul le gradient de pression entraîne l'écoulement → c'est la parabole de Poiseuille plan $u(y) = \frac{1}{2\mu}\frac{\partial P}{\partial x}(y^2-hy)$, solution exacte du TP OpenFOAM.*
+
 ### 4.5 Écoulement de Poiseuille Cylindrique (conduite ronde)
 
 Pour une conduite circulaire de rayon $R$, en coordonnées cylindriques $(r, \theta, x)$, la même démarche donne :
@@ -393,6 +408,9 @@ Dans la zone d'entrée :
 - Les termes advectifs $u\,\partial u/\partial x$ sont **non nuls** : Navier-Stokes est non-linéaire dans cette zone.
 
 > **Conséquence pour la pression** : la chute de pression mesurée dans un canal court est **supérieure** à la valeur analytique de Poiseuille car elle intègre la décélération du profil d'entrée (perte d'énergie cinétique par redistribution). C'est ce qu'on observait dans l'ancienne version du TP avec $L = 10$ m.
+
+![Zone d'entrée conduite](Images/chap9_zone_entree_conduite.png)
+*Fig. P9-29 (Cengel & Cimbala Chap.9) — Exercice sur la zone d'entrée d'une conduite : le diamètre varie de $D_{entrée}$ à $D_{sortie}$ selon le développement du profil axial $u_z(r,z)$. Illustre pourquoi la longueur de développement $L_{dev}$ est un paramètre **physique** (pas numérique) — les simulations case0-5 ont été allongées à $2 \times L_{dev}$ pour s'affranchir de cet effet.*
 
 ### 5.3 Tableau du TP — longueurs mises à jour
 
@@ -491,6 +509,9 @@ La turbulence est un régime d'écoulement caractérisé par :
 - Une **cascade énergétique** : l'énergie est injectée aux grandes échelles (tourbillons énergétiques), transférée vers les petites échelles, puis dissipée par viscosité (micro-échelles de Kolmogorov).
 
 La transition laminaire-turbulente dépend du Reynolds mais aussi des perturbations initiales et des conditions aux limites.
+
+![Transition turbulente — fil à bulles](Images/chap4_transition_turbulente.png)
+*Fig. 4-29 (Cengel & Cimbala Chap.4) — Visualisation expérimentale de la transition laminaire-turbulente par **fil à bulles d'hydrogène** : les timelines (lignes horizontales marquées à $t=0$) se déforment progressivement sous l'effet du profil de vitesse de la couche limite. À droite, on observe l'instabilité de Tollmien-Schlichting qui précède la transition vers la turbulence.*
 
 ### 7.2 Approche RANS
 
