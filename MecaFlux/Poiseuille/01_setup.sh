@@ -941,4 +941,4 @@ echo "  case4 : potentialFoam| 1.0 m/s | L=10m   | steady     | slip    | endTim
 echo "  case5 : icoFoam      | 1.0 m/s | L=200m  | transient  | noSlip  | endTime=400  (4×L_dev, Re=1000)"
 echo "          → Poiseuille PLEINEMENT ÉTABLI — coupes à 25/50/75/100% du canal"
 echo ""
-ok "master_setup_V2.sh terminé → lance : bash run_all_cases_V2.sh"
+ok "01_setup.sh terminé → lance : bash 02_run.sh"

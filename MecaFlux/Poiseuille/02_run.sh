@@ -112,4 +112,4 @@ for case in case0 case1 case2 case3 case4; do
 done
 
 echo ""
-ok "run_all_cases_V2.sh terminé !"
+ok "02_run.sh terminé !"

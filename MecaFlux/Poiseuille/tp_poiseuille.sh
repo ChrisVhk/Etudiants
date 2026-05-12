@@ -184,7 +184,7 @@ step_8() {
             print_ok "ParaView lancé (PID $!)"
         else
             print_warn "Fichier VTK introuvable : $series_file"
-            print_info "Exécute d'abord l'étape 2 (run_all_cases_V2.sh)."
+            print_info "Exécute d'abord l'étape 2 (02_run.sh)."
         fi
     else
         print_warn "ParaView non trouvé — installez avec : sudo apt install paraview"
