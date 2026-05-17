@@ -130,65 +130,77 @@ Dans VS Code :
 
 ---
 
-### 5.3 Installer les extensions recommandées
+### 5.3 Extensions installées
 
-Une fois connecté à WSL (étape 6), certaines extensions doivent être installées **côté WSL** (elles apparaissent dans l'onglet "WSL: Ubuntu-24.04" du panneau Extensions). VS Code le signale lui-même avec un bouton **"Install in WSL"**.
+Certaines extensions s'installent **côté Windows** (une seule fois), d'autres doivent aussi être installées **côté WSL** (VS Code le signale avec un bouton **"Install in WSL"** dans le panneau Extensions).
 
-Installez les extensions suivantes via `Ctrl+Shift+X` :
+---
 
-#### 🔵 Indispensables (connexion WSL)
-
-| Extension | Identifiant | Rôle |
-|---|---|---|
-| **WSL** | `ms-vscode-remote.remote-wsl` | Pont Windows ↔ Linux — **obligatoire** |
-| **Remote Development** (pack) | `ms-vscode-remote.vscode-remote-extensionpack` | WSL + SSH + Dev Containers |
-
-#### 🐍 Python & scripts
+#### 🔵 Connexion distante — côté Windows uniquement
 
 | Extension | Identifiant | Rôle |
 |---|---|---|
-| **Python** | `ms-python.python` | Coloration, IntelliSense, débogage Python |
-| **Pylance** | `ms-python.vpylance` | Analyse statique Python avancée (installé auto avec Python) |
+| **Remote Development** (pack) | `ms-vscode-remote.vscode-remote-extensionpack` | Installe WSL + SSH + Remote Explorer en un clic |
+| **WSL** | `ms-vscode-remote.remote-wsl` | Pont Windows ↔ Linux — inclus dans le pack ci-dessus |
+| **Remote SSH** | `ms-vscode-remote.remote-ssh` | Connexion à des machines distantes via SSH |
+| **Remote Explorer** | `ms-vscode.remote-explorer` | Panneau listant les connexions WSL/SSH actives |
+
+---
+
+#### 🐍 Python & data — à installer dans WSL
+
+| Extension | Identifiant | Rôle |
+|---|---|---|
+| **Python** | `ms-python.python` | IntelliSense, débogage, sélection d'environnement |
+| **Pylance** | `ms-python.vscode-pylance` | Analyse statique avancée (auto-installé avec Python) |
+| **Debugpy** | `ms-python.debugpy` | Débogueur Python (auto-installé avec Python) |
+| **Python Envs** | `ms-python.vscode-python-envs` | Gestion des environnements virtuels (venv, conda) |
 | **Jupyter** | `ms-toolsai.jupyter` | Notebooks `.ipynb` directement dans VS Code |
-| **Shell Script** | `mads-hartmann.bash-ide-vscode` | Complétion et lint pour les scripts `.sh` |
-| **ShellCheck** | `timonwong.shellcheck` | Détection d'erreurs dans les scripts bash |
+| **Ruff** | `charliermarsh.ruff` | Linter + formateur Python ultrarapide (remplace flake8/black) |
 
-#### 📝 Édition & confort
+---
 
-| Extension | Identifiant | Rôle |
-|---|---|---|
-| **Markdown All in One** | `yzhang.markdown-all-in-one` | Prévisualisation et raccourcis Markdown |
-| **GitLens** | `eamodio.gitlens` | Historique git ligne par ligne, blame, etc. |
-| **Git Graph** | `mhutchie.git-graph` | Visualisation graphique des branches git |
-| **indent-rainbow** | `oderwat.indent-rainbow` | Colorisation des niveaux d'indentation |
-| **Better Comments** | `aaron-bond.better-comments` | Commentaires colorés (`TODO`, `!`, `?`...) |
-
-#### 🌊 OpenFOAM (optionnel)
+#### 📊 Git
 
 | Extension | Identifiant | Rôle |
 |---|---|---|
-| **OpenFOAM** | `OpenFOAM.openfoam-vscode` | Coloration syntaxique des fichiers OpenFOAM (`blockMeshDict`, `fvSchemes`, etc.) |
+| **Git Graph** | `mhutchie.git-graph` | Visualisation graphique des branches et commits |
+
+---
+
+#### 📄 Utilitaires
+
+| Extension | Identifiant | Rôle |
+|---|---|---|
+| **PDF Viewer** | `tomoki1207.pdf` | Prévisualisation des PDFs dans VS Code |
+| **Dev Containers** | `ms-azuretools.vscode-containers` | Développement dans des conteneurs Docker |
+
+---
+
+#### 🤖 Intelligence artificielle (optionnel)
+
+| Extension | Identifiant | Rôle |
+|---|---|---|
+| **GitHub Copilot Chat** | `github.copilot-chat` | Suggestions de code et chat IA (compte GitHub requis) |
+| **Claude Code** | `anthropic.claude-code` | Agent de code IA Anthropic (compte requis) |
 
 ---
 
 #### Installation en une commande (depuis le terminal WSL dans VS Code)
 
-Une fois connecté à WSL, vous pouvez tout installer en une seule commande dans le terminal intégré :
+Une fois connecté à WSL (étape 6), lancez cette commande dans le terminal intégré pour installer les extensions côté WSL :
 
 ```bash
 code --install-extension ms-python.python \
+     --install-extension ms-python.vscode-pylance \
+     --install-extension ms-python.vscode-python-envs \
      --install-extension ms-toolsai.jupyter \
-     --install-extension mads-hartmann.bash-ide-vscode \
-     --install-extension timonwong.shellcheck \
-     --install-extension yzhang.markdown-all-in-one \
-     --install-extension eamodio.gitlens \
+     --install-extension charliermarsh.ruff \
      --install-extension mhutchie.git-graph \
-     --install-extension oderwat.indent-rainbow \
-     --install-extension aaron-bond.better-comments \
-     --install-extension OpenFOAM.openfoam-vscode
+     --install-extension tomoki1207.pdf
 ```
 
-> ⚠️ Cette commande installe les extensions **dans WSL**. Elle doit être lancée depuis un terminal VS Code ouvert en mode WSL (bandeau `WSL: Ubuntu-24.04` visible en bas à gauche).
+> ⚠️ Cette commande installe les extensions **dans WSL**. Le bandeau `WSL: Ubuntu-24.04` doit être visible en bas à gauche de VS Code.
 
 ---
 
