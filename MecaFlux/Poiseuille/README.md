@@ -36,7 +36,7 @@ Poiseuille/
 ├── 03_postprocess.sh     → post-traitement Python seul (étapes 3–7)
 ├── 04_clean.sh           → nettoyage complet
 ├── scripts/              → scripts Python d'analyse et de tracé
-├── Enonce/               → documents pédagogiques (voir ci-dessous)
+├── docs/                 → documents pédagogiques (voir ci-dessous)
 ├── case0/ … case5/       → générés par 01_setup.sh  (ignorés par git)
 └── Results/              → générés par post-traitement (ignorés par git)
 ```
@@ -72,23 +72,24 @@ Poiseuille/
 
 | Niveau | Durée | Document |
 |--------|-------|----------|
-| 1 — Démarrage | 15 min | `Enonce/02_QCM_PREREQUIS_ETUDIANT.md` |
-| 2 — Simulation | 60–90 min | `Enonce/01_GUIDE_ETUDIANT_PAS_A_PAS_PREMIER_OPENFOAM.md` |
-| 3 — Visualisation | 45 min | `Enonce/08_GUIDE_PARAVIEW_PAS_A_PAS.md` |
-| 4 — Analyse et validation | — | `Enonce/04_BASE_THEORIQUE_SOLVEURS_OPENFOAM.md` + `Enonce/03_QCM_FINAL_ETUDIANT.md` |
+| 1 — Lancement | 10 min | `docs/01_FICHE_CONSIGNE.md` |
+| 2 — Théorie (pendant les calculs) | 30 min | `docs/02_QCM_PREREQUIS.md` + `docs/03_BASE_THEORIQUE.md` |
+| 3 — Visualisation | 60 min | `docs/05_GUIDE_PARAVIEW.md` |
+| 4 — Analyse et interprétation | 80 min | `docs/04_GUIDE_PAS_A_PAS.md` |
+| 5 — Restitution | 40 min | `docs/06_QCM_FINAL.md` |
 
-## Documents du dossier `Enonce/`
+## Documents du dossier `docs/`
 
-| Fichier | Rôle | Destinataire |
-|---------|------|-------------|
-| `01_GUIDE_ETUDIANT_PAS_A_PAS_PREMIER_OPENFOAM.md` | Colonne vertébrale opérationnelle du TP | Étudiant |
-| `02_QCM_PREREQUIS_ETUDIANT.md` | Diagnostic d'entrée | Étudiant |
-| `03_QCM_FINAL_ETUDIANT.md` | Vérification des acquis en sortie | Étudiant |
-| `04_BASE_THEORIQUE_SOLVEURS_OPENFOAM.md` | Appui méthodologique et théorique | Étudiant |
-| `05_CORRIGE_QCM_PREREQUIS_FINAL.md` | Correction des QCM | Enseignant |
-| `06_FICHE_ETUDIANT_CONSIGNE.md` | Consignes, barème, attentes | Étudiant |
-| `07_FICHE_ENSEIGNANT_CORRIGE_TYPE.md` | Correction type et grille d'évaluation | Enseignant |
-| `08_GUIDE_PARAVIEW_PAS_A_PAS.md` | Visualisation, export, sauvegarde `.pvsm` | Étudiant |
+| # | Fichier | Rôle | Destinataire |
+|---|---------|------|-------------|
+| 01 | `01_FICHE_CONSIGNE.md` | **Lire en premier** — consignes, barème, déroulé 4h | 👤 Étudiant |
+| 02 | `02_QCM_PREREQUIS.md` | Diagnostic d'entrée — à faire pendant les calculs | 👤 Étudiant |
+| 03 | `03_BASE_THEORIQUE.md` | Appui théorique solveurs — à lire pendant les calculs | 👤 Étudiant |
+| 04 | `04_GUIDE_PAS_A_PAS.md` | Référence opérationnelle étape par étape | 👤 Étudiant |
+| 05 | `05_GUIDE_PARAVIEW.md` | Visualisation, export, sauvegarde `.pvsm` | 👤 Étudiant |
+| 06 | `06_QCM_FINAL.md` | Vérification des acquis en sortie | 👤 Étudiant |
+| 07 | `07_CORRIGE_QCM.md` | Correction des QCM | 📋 Enseignant |
+| 08 | `08_FICHE_ENSEIGNANT.md` | Correction type et grille d'évaluation | 📋 Enseignant |
 
 ---
 

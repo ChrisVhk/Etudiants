@@ -13,7 +13,7 @@ from reportlab.pdfgen import canvas
 
 
 ROOT = Path(__file__).resolve().parents[1]
-PACK_DIR = ROOT / "Enonce" / "PACK_DIFFUSION"
+PACK_DIR = ROOT / "docs" / "PACK_DIFFUSION"
 
 
 def to_text_lines(md_content: str) -> list[str]:
