@@ -96,7 +96,7 @@ echo ""
 printf "  %-8s %-12s %-8s %-10s %-8s\n" "Case" "Solveur" "Steps" "Log" "VTK"
 printf "  %-8s %-12s %-8s %-10s %-8s\n" "--------" "------------" "--------" "----------" "--------"
 
-for case in case0 case1 case2 case3 case4; do
+for case in case0 case1 case2 case3 case4 case5; do
     SOLVER_NAME="${SOLVER[$case]}"
     LOG="$SCRIPT_DIR/$case/log.$SOLVER_NAME"
     if grep -q 'potentialFoam' "$SCRIPT_DIR/$case/system/controlDict" 2>/dev/null; then
