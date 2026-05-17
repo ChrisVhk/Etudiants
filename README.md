@@ -12,7 +12,9 @@ Etudiants/
 ├── MecaFlux/
 │   ├── InstallOpenFoam/         — Parcours d'installation OpenFOAM 2412
 │   └── Poiseuille/              — TP CFD : Écoulement de Hagen-Poiseuille
+├── Python&Dep/                  — Dépendances Python pour le post-traitement
 ├── TenueMer/                    — TP Tenue à la mer (en préparation)
+├── VScode&WSL/                  — Installation WSL + VS Code (Windows)
 └── scripts/
     └── init_tp.sh               — Script d'initialisation d'un nouveau TP
 ```
@@ -69,6 +71,26 @@ bash run_postproc.sh
 | `04_BASE_THEORIQUE_SOLVEURS_OPENFOAM.md` | Base théorique et formules |
 | `06_FICHE_ETUDIANT_CONSIGNE.md` | Consignes de TP |
 | `08_GUIDE_PARAVIEW_PAS_A_PAS.md` | Guide de visualisation ParaView |
+
+---
+
+## Environnement de développement
+
+### WSL + VS Code — `VScode&WSL/`
+
+Guide pas à pas pour installer Ubuntu 24.04 sous Windows via WSL et configurer VS Code avec l'extension Remote WSL.
+
+Voir [`VScode&WSL/Install_VSCode_WSL.md`](VScode%26WSL/Install_VSCode_WSL.md)
+
+### Dépendances Python — `Python&Dep/`
+
+Installation des bibliothèques Python nécessaires au post-traitement (numpy, matplotlib, scipy, pandas, reportlab).
+
+```bash
+bash Python\&Dep/install_python_deps.sh
+```
+
+Voir [`Python&Dep/Install_Python_Deps.md`](Python%26Dep/Install_Python_Deps.md)
 
 ---
 
