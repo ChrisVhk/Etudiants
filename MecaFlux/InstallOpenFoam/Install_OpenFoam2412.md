@@ -20,7 +20,7 @@ wget -q -O - https://dl.openfoam.com/add-debian-repo.sh | sudo bash
 sudo apt update
 sudo apt upgrade
 sudo apt install openfoam2412-default
-sudo apt install paraviewopenfoam2412-default
+sudo apt install paraview   # paraviewopenfoam2412-default n'existe plus (supprimé post-2024)
 echo "source /usr/lib/openfoam/openfoam2412/etc/bashrc" >> ~/.bashrc
 source ~/.bashrc
 foamVersion
@@ -66,7 +66,7 @@ apt show openfoam2412-default
 
 ```bash
 sudo apt install openfoam2412-default
-sudo apt install paraviewopenfoam2412-default
+sudo apt install paraview   # paraviewopenfoam2412-default n'existe plus (supprimé post-2024)
 ```
 
 ### D. Charger l'environnement automatiquement
