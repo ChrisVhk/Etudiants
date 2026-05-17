@@ -104,3 +104,5 @@ Poiseuille/
 - **Défi chrono** : visualisation propre U+p comparant case0 et case5 en moins de 20 minutes.
 - **Défi qualité** : quantifier l'écart entre case0 (non développé) et case5 (établi) et l'expliquer en 3 phrases.
 - **Défi physique** : expliquer pourquoi case4 (potentialFoam) n'a aucune chute de pression.
+
+<- TenueMer : en test sync -->
