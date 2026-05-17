@@ -182,7 +182,6 @@ Certaines extensions s'installent **côté Windows** (une seule fois), d'autres 
 | Extension | Identifiant | Rôle |
 |---|---|---|
 | **GitHub Copilot Chat** | `github.copilot-chat` | Suggestions de code et chat IA (compte GitHub requis) |
-| **Claude Code** | `anthropic.claude-code` | Agent de code IA Anthropic (compte requis) |
 
 ---
 
