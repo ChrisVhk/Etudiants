@@ -191,42 +191,60 @@ step_8() {
     fi
 }
 
+# ── Fonction utilitaire : exécuter une étape par numéro ───────────────────────
+run_step() {
+    case "$1" in
+        0) step_0 ;; 1) step_1 ;; 2) step_2 ;;
+        3) step_3 ;; 4) step_4 ;; 5) step_5 ;;
+        6) step_6 ;; 7) step_7 ;; 8) step_8 ;;
+        *) print_err "Étape inconnue : $1" ; exit 1 ;;
+    esac
+}
+
 # ── Dispatch ──────────────────────────────────────────────────────────────────
-case "${1:-all}" in
-    0)   step_0 ;;
-    1)   step_1 ;;
-    2)   step_2 ;;
-    3)   step_3 ;;
-    4)   step_4 ;;
-    5)   step_5 ;;
-    6)   step_6 ;;
-    7)   step_7 ;;
-    8)   step_8 ;;
+ARG="${1:-all}"
+case "$ARG" in
     all)
-        step_0
-        step_1
-        step_2
-        step_3
-        step_4
-        step_5
-        step_6
-        step_7
-        step_8
+        step_0; step_1; step_2; step_3; step_4
+        step_5; step_6; step_7; step_8
         echo -e "\n${GREEN}🎉 Workflow complet terminé avec succès !${NC}"
         ;;
+    *-*)
+        # Plage : ex. 3-7
+        START="${ARG%-*}"
+        END="${ARG#*-}"
+        if ! [[ "$START" =~ ^[0-8]$ && "$END" =~ ^[0-8]$ && "$START" -le "$END" ]]; then
+            print_err "Plage invalide : $ARG (ex: 3-7)"
+            exit 1
+        fi
+        for i in $(seq "$START" "$END"); do run_step "$i"; done
+        ;;
+    *,*)
+        # Liste : ex. 1,2,5
+        IFS=',' read -ra STEPS <<< "$ARG"
+        for i in "${STEPS[@]}"; do
+            [[ "$i" =~ ^[0-8]$ ]] || { print_err "Étape invalide : $i"; exit 1; }
+            run_step "$i"
+        done
+        ;;
+    [0-8])
+        run_step "$ARG"
+        ;;
     *)
-        echo "Usage : $0 [0|1|2|3|4|5|6|7|8|all]"
+        echo "Usage : $0 [0|1|2|3|4|5|6|7|8|all|3-7|1,2,5]"
         echo ""
-        echo "  0   — Installation venv + dépendances Python (via apt)"
-        echo "  1   — Création des cas OpenFOAM"
-        echo "  2   — Simulations (blockMesh + solveurs + VTK)"
-        echo "  3   — Analyse des résultats"
-        echo "  4   — Génération des graphiques"
-        echo "  5   — Comparaison des cas"
-        echo "  6   — Extraction profils de vitesse"
-        echo "  7   — Vérification convergence"
-        echo "  8   — Lancement ParaView"
-        echo "  all — Tout exécuter dans l'ordre"
+        echo "  0     — Installation venv + dépendances Python (via apt)"
+        echo "  1     — Création des cas OpenFOAM"
+        echo "  2     — Simulations (blockMesh + solveurs + VTK)"
+        echo "  3     — Analyse des résultats"
+        echo "  4     — Génération des graphiques"
+        echo "  5     — Comparaison des cas"
+        echo "  6     — Extraction profils de vitesse"
+        echo "  7     — Vérification convergence"
+        echo "  8     — Lancement ParaView"
+        echo "  all   — Tout exécuter dans l'ordre"
+        echo "  3-7   — Plage d'étapes (post-traitement seul)"
+        echo "  1,2,5 — Liste d'étapes au choix"
         exit 1
         ;;
 esac
