@@ -39,7 +39,7 @@ LABELS = {
     "case2": "icoFoam — Re=1500 (effet Re élevé)",
     "case3": "simpleFoam — Re=1500 (steady-state)",
     "case4": "potentialFoam — inviscide",
-    "case5": "icoFoam — L=100m (Poiseuille établi)",
+    "case5": "icoFoam — L=200m (Poiseuille établi)",
 }
 SOLVERS = {
     "case0": "icoFoam",

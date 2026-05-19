@@ -62,21 +62,21 @@ bash tp_poiseuille.sh all
 
 ### Documents pédagogiques (`Poiseuille/docs/`)
 
-| Fichier | Contenu | Destinataire |
-|---------|---------|-------------|
-| `01_GUIDE_ETUDIANT_PAS_A_PAS_PREMIER_OPENFOAM.md` | Guide étudiant opérationnel pas à pas | 👤 Étudiant |
-| `02_QCM_PREREQUIS_ETUDIANT.md` | QCM de prérequis (pendant les calculs) | 👤 Étudiant |
-| `03_QCM_FINAL_ETUDIANT.md` | QCM d'évaluation finale | 👤 Étudiant |
-| `04_BASE_THEORIQUE_SOLVEURS_OPENFOAM.md` | Base théorique — solveurs et formules | 👤 Étudiant |
-| `06_FICHE_ETUDIANT_CONSIGNE.md` | Consignes, barème, déroulé 4h | 👤 Étudiant |
-| `08_GUIDE_PARAVIEW_PAS_A_PAS.md` | Visualisation, export, fichiers `.pvsm` | 👤 Étudiant |
+| #  | Fichier                  | Contenu                                                     | Destinataire   |
+|----|--------------------------|-------------------------------------------------------------|----------------|
+| 01 | `01_FICHE_CONSIGNE.md`   | **À lire en premier** — consignes, barème, déroulé 4h        | 👤 Étudiant    |
+| 02 | `02_QCM_PREREQUIS.md`    | QCM de positionnement — à faire pendant les calculs          | 👤 Étudiant    |
+| 03 | `03_BASE_THEORIQUE.md`   | Base théorique — équations, hypothèses, solveurs             | 👤 Étudiant    |
+| 04 | `04_GUIDE_PAS_A_PAS.md`  | Guide opérationnel étape par étape                           | 👤 Étudiant    |
+| 05 | `05_GUIDE_PARAVIEW.md`   | Visualisation, export, sauvegarde `.pvsm`                    | 👤 Étudiant    |
+| 06 | `06_QCM_FINAL.md`        | QCM d'évaluation des acquis                                  | 👤 Étudiant    |
 
 ### Parcours pédagogique
 
-| Étape | Durée | Action |
-|-------|-------|--------|
-| 1 | 10 min | Lire `06_FICHE_ETUDIANT_CONSIGNE.md`, lancer `bash tp_poiseuille.sh all` |
-| 2 | 30 min | `02_QCM_PREREQUIS_ETUDIANT.md` + `04_BASE_THEORIQUE_SOLVEURS_OPENFOAM.md` (pendant les calculs) |
-| 3 | 60 min | Visualisation ParaView — `08_GUIDE_PARAVIEW_PAS_A_PAS.md` |
-| 4 | 80 min | Analyse et interprétation — `01_GUIDE_ETUDIANT_PAS_A_PAS_PREMIER_OPENFOAM.md` |
-| 5 | 40 min | `03_QCM_FINAL_ETUDIANT.md` — restitution |
+| Étape | Durée  | Action |
+|-------|--------|--------|
+| 1     | 10 min | Lire `01_FICHE_CONSIGNE.md`, lancer `bash tp_poiseuille.sh all` |
+| 2     | 30 min | `02_QCM_PREREQUIS.md` + `03_BASE_THEORIQUE.md` (pendant les calculs) |
+| 3     | 60 min | Visualisation ParaView — `05_GUIDE_PARAVIEW.md` |
+| 4     | 80 min | Analyse et interprétation — `04_GUIDE_PAS_A_PAS.md` |
+| 5     | 40 min | `06_QCM_FINAL.md` — restitution |

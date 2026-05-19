@@ -12,7 +12,7 @@ Comparer **3 modèles physiques** et **2 solveurs** sur un canal plan 2D (Poiseu
 
 En fin de TP, vous devez répondre clairement :
 - Pourquoi le profil numérique de case0 s'écarte-t-il de la parabole analytique ?
-- Pourquoi case5 (L=100m) donne-t-il un profil quasi-parfait ?
+- Pourquoi case5 (L=200 m) donne-t-il un profil quasi-parfait ?
 - Pourquoi potentialFoam ne peut pas remplacer un solveur visqueux pour les pertes de charge ?
 - Quel solveur choisir selon l'objectif (rapidité, précision, fidélité physique) ?
 
@@ -22,7 +22,7 @@ En fin de TP, vous devez répondre clairement :
 
 | Phase | Durée | Activité |
 |-------|-------|----------|
-| 0h00 – 0h15 | 15 min | QCM prérequis (`02_QCM_PREREQUIS_ETUDIANT.md`) |
+| 0h00 – 0h15 | 15 min | QCM prérequis (`02_QCM_PREREQUIS.md`) |
 | 0h15 – 0h45 | 30 min | Vérification environnement + génération des cas |
 | 0h45 – 1h45 | 60 min | Lancement des 6 simulations |
 | 1h45 – 2h30 | 45 min | Post-traitement Python + analyse des figures |
@@ -35,15 +35,16 @@ En fin de TP, vous devez répondre clairement :
 
 ```bash
 # Option 1 : tout en une commande (recommandé)
-bash run_workflow.sh
+bash tp_poiseuille.sh all
 
 # Option 2 : étape par étape
-bash master_setup_V2.sh       # Génère les 6 cas (case0 à case5)
-bash run_all_cases_V2.sh      # blockMesh + solveurs + foamToVTK
-bash run_postproc.sh          # Tous les scripts Python (figures + stats)
+bash tp_poiseuille.sh 1       # 01_setup.sh — génère les 6 cas (case0 à case5)
+bash tp_poiseuille.sh 2       # 02_run.sh — blockMesh + solveurs + foamToVTK
+bash tp_poiseuille.sh 3-7     # post-traitement Python (figures + stats)
+bash tp_poiseuille.sh 8       # ouvre ParaView
 ```
 
-> **case5 (L=100m) prend environ 5-10 min de calcul** — lancez-le en premier !
+> **case5 (L=200 m, 4×L_dev) est le plus long** : ~5-10 min de calcul selon la machine. Il est lancé automatiquement dans la séquence `all`.
 
 ---
 
@@ -53,12 +54,12 @@ bash run_postproc.sh          # Tous les scripts Python (figures + stats)
 
 $$L_{dev} \approx 0.05 \times Re \times H$$
 
-| Cas   | Re   | $L_{dev}$ | Canal | Développement à la sortie |
-|-------|------|-----------|-------|--------------------------|
-| case0 | 1000 | **50 m**  | 10 m  | **20 %** seulement       |
-| case1 | 500  | **25 m**  | 10 m  | **40 %** seulement       |
-| case2 | 1500 | **75 m**  | 10 m  | **13 %** seulement       |
-| case5 | 1000 | **50 m**  | 100 m | **100 %** ✅             |
+| Cas   | Re   | $L_{dev}$ | Canal  | Développement à la sortie |
+|-------|------|-----------|--------|---------------------------|
+| case0 | 1000 | **50 m**  | 100 m  | **2×L_dev** — partiellement établi |
+| case1 |  500 | **25 m**  |  50 m  | **2×L_dev** — partiellement établi |
+| case2 | 1500 | **75 m**  | 150 m  | **2×L_dev** — partiellement établi |
+| case5 | 1000 | **50 m**  | 200 m  | **4×L_dev** — pleinement établi ✅ |
 
 > **Ce n'est pas un bug — c'est de la physique.** Pour atteindre le profil parabolique de Poiseuille, il faut un canal suffisamment long. case5 est la démonstration expérimentale.
 

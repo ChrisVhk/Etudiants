@@ -3,17 +3,20 @@
 
 ## 1. Mission
 Vous devez:
-1. Charger les 5 simulations (case0 a case4).
+1. Charger les 6 simulations (case0 a case5).
 2. Produire des visualisations comparables (U et p).
 3. Exporter des images propres pour le rapport.
 4. Enregistrer un etat global `paraview_cases.pvsm` reutilisable.
 
+> **Cle pedagogique** : case5 (L=200 m, 4×L_dev) est le seul cas ou le profil parabolique analytique apparait pleinement. Sa visualisation est obligatoire dans votre rapport.
+
 ## 2. Preparation robuste
-Placez-vous dans le dossier Poiseuille:
+Placez-vous dans votre dossier Poiseuille (le chemin depend de votre installation) :
 
 ```bash
-cd /home/chrisvhk/Work_OpenFoam/Poiseuille
-ls case0 case1 case2 case3 case4
+# Exemple — adaptez au chemin reel sur votre machine
+cd ~/Etudiants/MecaFlux/Poiseuille
+ls case0 case1 case2 case3 case4 case5
 ```
 
 Creation des fichiers `.foam` (recommandee):
@@ -31,6 +34,7 @@ bash scripts/create_foam_files.sh
    - `case2/case2.foam`
    - `case3/case3.foam`
    - `case4/case4.foam`
+   - `case5/case5.foam`
 4. Cliquer `Apply` pour chaque source.
 5. Dans `Animation View`, se placer au dernier pas de temps.
 
@@ -90,7 +94,7 @@ mkdir -p Results/paraview_images
 ## 8. Recharger rapidement
 1. `File > Load State`.
 2. Selectionner `paraview_cases.pvsm`.
-3. Si demande de remappage, pointer vers `case0..case4`.
+3. Si demande de remappage, pointer vers `case0..case5`.
 
 ## 9. Checkpoints de validation
 1. Une vue vitesse comparable entre au moins 3 cas.
@@ -101,7 +105,7 @@ mkdir -p Results/paraview_images
 
 ## 10. Mini-defis (ludique)
 - Defi 1: sortir une figure U comparative en moins de 10 minutes.
-- Defi 2: reproduire la meme camera sur 5 cas sans decalage visuel.
+- Defi 2: reproduire la meme camera sur 6 cas sans decalage visuel.
 - Defi 3: proposer la figure la plus utile pour expliquer la perte de charge.
 
 ## 11. Erreurs frequentes a eviter
