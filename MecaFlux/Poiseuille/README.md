@@ -88,8 +88,9 @@ Poiseuille/
 | 04 | `04_GUIDE_PAS_A_PAS.md` | Référence opérationnelle étape par étape | 👤 Étudiant |
 | 05 | `05_GUIDE_PARAVIEW.md` | Visualisation, export, sauvegarde `.pvsm` | 👤 Étudiant |
 | 06 | `06_QCM_FINAL.md` | Vérification des acquis en sortie | 👤 Étudiant |
-| 07 | `07_CORRIGE_QCM.md` | Correction des QCM | 📋 Enseignant |
-| 08 | `08_FICHE_ENSEIGNANT.md` | Correction type et grille d'évaluation | 📋 Enseignant |
+| 07 | `07_AIDE_MEMOIRE.md` | Aide-mémoire A4 imprimable (équations, solveurs, commandes) | 👤 Étudiant |
+| 08 | `08_CORRIGE_QCM.md` | Correction des QCM | 📋 Enseignant |
+| 09 | `09_FICHE_ENSEIGNANT.md` | Correction type et grille d'évaluation | 📋 Enseignant |
 
 ---
 

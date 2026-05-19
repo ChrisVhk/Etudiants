@@ -106,4 +106,4 @@ Q7: ___  Q8: ___  Q9: ___  Q10: ___  Q11: ___ Q12: ___
 
 ---
 
-*Différences vs Groupe A : 12 questions au lieu de 10. Ajout de Q3 (Re), Q4 (L_dev), Q8 (écart U_max) — calcul direct. Q1 et Q2 du Groupe A déplacées ici depuis le QCM prérequis (potentialFoam, pression cinématique). Une grille de barème reste sur 20 — voir `08_FICHE_ENSEIGNANT.md` pour la conversion 12 → 20.*
+*Différences vs Groupe A : 12 questions au lieu de 10. Ajout de Q3 (Re), Q4 (L_dev), Q8 (écart U_max) — calcul direct. Q1 et Q2 du Groupe A déplacées ici depuis le QCM prérequis (potentialFoam, pression cinématique). Une grille de barème reste sur 20 — voir `09_FICHE_ENSEIGNANT.md` pour la conversion 12 → 20.*
